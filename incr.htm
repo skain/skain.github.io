@@ -7,6 +7,7 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu">
+	<link rel="stylesheet" href="./circle.css">
 	<style>
 		div.col {
 			font-family: 'Ubuntu', sans-serif;
@@ -17,25 +18,67 @@
 </head>
 
 <body>
-	<div class="container">
+	<div id="app" class="container">
 		<div class="row">
 			<div class="col">
-				<h1>Score: <span id='score'></span></h1>
+				<div class="progress blue">
+					<span class="progress-left">
+						<span class="progress-bar"></span>
+					</span>
+					<span class="progress-right">
+						<span class="progress-bar"></span>
+					</span>
+					<div class="progress-value">70%</div>
+				</div>
+			</div>
+			<div class="col">
+				<h1>Score: <span id='score'>{{ game.curPoints }}</span></h1>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col">
-				<button type="button" class="btn btn-info" onclick="game.start()">Start</button>
-				<button type="button" class="btn btn-info" onclick="game.stop()">Stop</button>
-				<button type="button" class="btn btn-info" onclick="game.reset()">Reset</button>
-				<button type="button" class="btn btn-info" onclick="game.resetTimer()">Reset Just Timer</button>
+				<button type="button" class="btn btn-success btn-lg" @click="game.registerClick()">Click!</button>
+			</div>
+		</div>
+		<div v-if="game.curPoints > 10" class="row">
+			<div class="col">
+				div
+			</div>
+			<div class="col">
+				div
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<button type="button" class="btn btn-info" @click="game.start()">Start</button>
+				<button type="button" class="btn btn-info" @click="game.stop()">Stop</button>
+				<button type="button" class="btn btn-info" @click="game.reset()">Reset</button>
+				<button type="button" class="btn btn-info" @click="game.resetTimer()">Reset Just Timer</button>
 			</div>
 		</div>
 	</div>
+	<script type="importmap">
+	  {
+	    "imports": {
+	      "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+	    }
+	  }
+	</script>
 	<script src="incr.js"></script>
-	<script>
-		const game = new IncrGame();
-		game.start();
+	<script type="module">
+		import { createApp } from 'vue';
+
+		const app = createApp({
+			data() {
+				return {
+					game: new IncrGame()
+				}
+			},
+			mounted() {
+				this.game.start();
+			}
+		}).mount('#app');
+		
 	</script>
 </body>
 

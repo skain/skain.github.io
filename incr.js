@@ -1,6 +1,8 @@
 class IncrGame {
 	constructor() {
 		this.intervalId = null;
+		this.curPoints = 0;
+		this.clicksPerSecondModifiers = [];
 	}
 
 	get lastUpdatedStorageKey() {
@@ -22,39 +24,53 @@ class IncrGame {
 	}
 
 	getCurPoints() {
-		let curPoints = 0;
+		let points = 0;
 		let pointsFromStorage = parseInt(localStorage.getItem(this.curPointsStorageKey));
 		if (pointsFromStorage) {
-			curPoints = pointsFromStorage;
+			points = pointsFromStorage;
 		}
 
-		return curPoints;
+		return points;
 	}
 
-	saveCurPoints(curPoints) {
-		localStorage.setItem(this.curPointsStorageKey, curPoints);
+	saveCurPoints() {
+		localStorage.setItem(this.curPointsStorageKey, this.curPoints);
 	}
 
 	update() {
 		let lastUpdated = this.getLastUpdated();
-		let curPoints = this.getCurPoints();
+		this.curPoints = this.getCurPoints();
 		if (lastUpdated) {
 			let ticks = new Date() - lastUpdated;
-			curPoints += Math.floor(ticks / 1000);
+			this.registerAutoClicksForTicksEllapsed(ticks);
 		}
 
-		this.saveCurPoints(curPoints);
-		this.showScore(curPoints);
+		this.saveCurPoints();
 
 		this.resetTimer();
 	}
 
-	resetTimer() {
-		localStorage.setItem(this.lastUpdatedStorageKey, new Date());
+	getAutoClicksPerSecondModifier() {
+		let modifier = 0;
+		this.clicksPerSecondModifiers.forEach( mod => {
+			modifier+=mod;
+		});
+
+		return modifier;
 	}
 
-	showScore(points) {
-		document.querySelector('span#score').innerHTML = points;
+	registerAutoClicksForTicksEllapsed(ticks) {
+		let seconds = Math.floor(ticks / 1000);
+		let cpsModifier = this.getAutoClicksPerSecondModifier();
+		let timesToClick = Math.floor(seconds * cpsModifier);
+		for (let i = 0; i < timesToClick; i++)
+		{
+			this.registerClick();
+		}
+	}
+
+	resetTimer() {
+		localStorage.setItem(this.lastUpdatedStorageKey, new Date());
 	}
 
 	start() {
@@ -70,5 +86,21 @@ class IncrGame {
 	reset() {
 		this.resetTimer();
 		this.saveCurPoints(0);
+	}
+
+	getClickCoefficient() {
+		return 1;
+	}
+
+	getClickModifier() {
+		return 1;
+	}
+
+	registerClick() {
+		let coefficient = this.getClickCoefficient();
+		let modifier = this.getClickModifier();
+
+		this.curPoints += coefficient * modifier;
+		this.saveCurPoints();
 	}
 }
