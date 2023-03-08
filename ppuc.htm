@@ -9,14 +9,25 @@
 		* {
 			font-family: 'Ubuntu', sans-serif;
 		}
-		html, input {					
+
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		html,
+		input {
 			font-size: 1.5rem;
 		}
 
 
 		#app {
-			margin: auto;
-			width: max(360px, 40vw);	
+			margin: 0 auto;
+			width: max(360px, 40vw);
+			background: linear-gradient(to bottom right, #F5D0C5, white);
+			color: #3C0000;
+			padding-top: 1px;
+			min-height: 90vh;
 		}
 
 		#form-grid {
@@ -25,6 +36,7 @@
 			column-gap: 2vw;
 			row-gap: 4px;
 			align-items: center;
+			margin: 1vw 2vw;
 		}
 
 		input {
@@ -37,8 +49,20 @@
 			justify-self: right;
 		}
 
+		#button-row {
+			display: flex;
+			justify-content: center;
+			gap: 2vw;
+			margin: 1vh 0;
+		}
+
 		button {
 			font-size: .9em;
+			border-radius: 4px;
+			border: solid 0px white;
+			padding: .5em;
+			background-color: #D69F7E;
+			color: #3C0000;
 		}
 	</style>
 </head>
@@ -50,28 +74,67 @@
 				Units
 			</div>
 			<div>
-				<input type="number" id="units-tb" />
+				<input type="number" id="units-tb1" />
 			</div>
 			<div class="label">
-				Cost
+				Price
 			</div>
 			<div>
-				<input type="number" id="cost-tb" step="0.01" min="0.00">
+				<input type="number" id="cost-tb1" step="0.01" min="0.00">
 			</div>
 			<div class="label">
-				<button type="button" id="calc-btn" onclick="calc()">Calc</button>
+				Price/Unit
 			</div>
 			<div>
-				<input type="number" id="output-tb" step="0.01" readonly />
+				<input type="number" id="output-tb1" step="0.01" readonly />
+			</div>
+			<div>
+			</div>
+			<div id="button-row">
+				<button type="button" id="calc-btn" onclick="calc();">Calc</button>
+				<button type="button" onclick="swap();">Swap</button>
+			</div>
+			<div class="label">
+				Units
+			</div>
+			<div>
+				<input type="number" id="units-tb2" />
+			</div>
+			<div class="label">
+				Price
+			</div>
+			<div>
+				<input type="number" id="cost-tb2" step="0.01" min="0.00">
+			</div>
+			<div class="label">
+				Price/Unit
+			</div>
+			<div>
+				<input type="number" id="output-tb2" step="0.01" readonly />
 			</div>
 		</div>
 	</div>
 	<script>
-		const costTb = document.getElementById('cost-tb');
-		const unitsTb = document.getElementById('units-tb');
-		const outputTb = document.getElementById('output-tb');
+		const costTb1 = document.getElementById('cost-tb1');
+		const unitsTb1 = document.getElementById('units-tb1');
+		const outputTb1 = document.getElementById('output-tb1');
+		const costTb2 = document.getElementById('cost-tb2');
+		const unitsTb2 = document.getElementById('units-tb2');
+		const outputTb2 = document.getElementById('output-tb2');
+
 		function calc() {
-			outputTb.value = (costTb.value / unitsTb.value).toFixed(2);
+			outputTb1.value = (costTb1.value / unitsTb1.value).toFixed(2);
+			outputTb2.value = (costTb2.value / unitsTb2.value).toFixed(2);
+		}
+
+		function swap() {
+			let cost1 = costTb1.value;
+			let units1 = unitsTb1.value;
+			costTb1.value = costTb2.value;
+			unitsTb1.value = unitsTb2.value;
+			costTb2.value = cost1;
+			unitsTb2.value = units1;
+			calc();
 		}
 	</script>
 </body>
