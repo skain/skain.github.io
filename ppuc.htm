@@ -1,0 +1,79 @@
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+	<title>PPU Calculator</title>
+	<style>
+		* {
+			font-family: 'Ubuntu', sans-serif;
+		}
+		html, input {					
+			font-size: 1.5rem;
+		}
+
+
+		#app {
+			margin: auto;
+			width: max(360px, 40vw);	
+		}
+
+		#form-grid {
+			display: grid;
+			grid-template-columns: 1fr 8fr;
+			column-gap: 2vw;
+			row-gap: 4px;
+			align-items: center;
+		}
+
+		input {
+			width: 98%;
+			border-radius: 12px;
+			border: solid 1px lightgray;
+		}
+
+		.label {
+			justify-self: right;
+		}
+
+		button {
+			font-size: .9em;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app">
+		<div id="form-grid">
+			<div class="label">
+				Units
+			</div>
+			<div>
+				<input type="number" id="units-tb" />
+			</div>
+			<div class="label">
+				Cost
+			</div>
+			<div>
+				<input type="number" id="cost-tb" step="0.01" min="0.00">
+			</div>
+			<div class="label">
+				<button type="button" id="calc-btn" onclick="calc()">Calc</button>
+			</div>
+			<div>
+				<input type="number" id="output-tb" step="0.01" readonly />
+			</div>
+		</div>
+	</div>
+	<script>
+		const costTb = document.getElementById('cost-tb');
+		const unitsTb = document.getElementById('units-tb');
+		const outputTb = document.getElementById('output-tb');
+		function calc() {
+			outputTb.value = (costTb.value / unitsTb.value).toFixed(2);
+		}
+	</script>
+</body>
+
+</html>
